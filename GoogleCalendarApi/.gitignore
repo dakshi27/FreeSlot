@@ -1,0 +1,29 @@
+﻿# Build and user-specific files
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Secrets and config
+appsettings.json
+credentials.json
+.env
+
+# VS Code settings
+.vscode/
+
+# HTTP test files
+*.http
+
+# OAuth tokens
+GoogleOAuth/Google.Apis.Auth.OAuth2.Responses.TokenResponse-user
+
+# Launch profiles
+Properties/launchSettings.json
+
+# Logs and temp
+*.log
+*.tmp

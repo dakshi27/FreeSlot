@@ -1,0 +1,67 @@
+<h2>📅 FreeSlot</h2>
+
+<!-- Load Events -->
+<button (click)="loadEvents()">Load Events</button>
+<div *ngIf="loading">Loading events...</div>
+<table *ngIf="events?.length">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Attendees</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let event of events">
+      <td>{{ event.title }}</td>
+      <td>{{ formatDate(event.startTime) }}</td>
+      <td>{{ formatDate(event.endTime) }}</td>
+      <td>{{ event.attendees?.join(', ') }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Load Overlaps -->
+<button (click)="loadOverlaps()">Load Overlaps</button>
+<div *ngIf="loading">Loading overlaps...</div>
+<table *ngIf="overlaps?.length">
+  <thead>
+    <tr>
+      <th>Event 1</th>
+      <th>Start 1</th>
+      <th>End 1</th>
+      <th>Event 2</th>
+      <th>Start 2</th>
+      <th>End 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let o of overlaps">
+      <td>{{ o.event1 }}</td>
+      <td>{{ formatDate(o.start1) }}</td>
+      <td>{{ formatDate(o.end1) }}</td>
+      <td>{{ o.event2 }}</td>
+      <td>{{ formatDate(o.start2) }}</td>
+      <td>{{ formatDate(o.end2) }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Load Free Slots -->
+<button (click)="loadFreeSlots()">Load Free Slots</button>
+<div *ngIf="loading">Loading free slots...</div>
+<table *ngIf="freeSlots?.length">
+  <thead>
+    <tr>
+      <th>Start</th>
+      <th>End</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let slot of freeSlots">
+      <td>{{ formatDate(slot.start) }}</td>
+      <td>{{ formatDate(slot.end) }}</td>
+    </tr>
+  </tbody>
+</table>
