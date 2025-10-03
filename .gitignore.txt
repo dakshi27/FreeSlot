@@ -1,0 +1,22 @@
+# Ignore Visual Studio and build artifacts
+GoogleCalendarApi/bin/
+GoogleCalendarApi/obj/
+GoogleCalendarApi/.vs/
+GoogleCalendarApi/*.user
+GoogleCalendarApi/*.suo
+GoogleCalendarApi/*.http
+GoogleCalendarApi/*.log
+GoogleCalendarApi/*.tmp
+GoogleCalendarApi/.vscode/
+GoogleCalendarApi/appsettings.json
+GoogleCalendarApi/credentials.json
+GoogleCalendarApi/.env
+GoogleCalendarApi/GoogleOAuth/
+GoogleCalendarApi/Properties/launchSettings.json
+
+# Ignore Angular build artifacts
+calendar-ui/node_modules/
+calendar-ui/dist/
+calendar-ui/.env
+calendar-ui/.vscode/
+calendar-ui/*.log
