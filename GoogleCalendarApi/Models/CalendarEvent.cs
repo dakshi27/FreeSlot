@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GoogleCalendarApi.Models
 {
     public class CalendarEvent
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString(); // ✅ Add this
+        // local id (optional)
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+
+        // Google-specific information (populated when fetching / saved)
+        public string GoogleEventId { get; set; } = null;
+        public string CalendarId { get; set; } = "primary";
+
         public string Title { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
@@ -21,4 +26,5 @@ namespace GoogleCalendarApi.Models
         }
     }
 }
+
 

@@ -96,7 +96,7 @@ namespace GoogleCalendarApi.Controllers
             }));
         }
 
-        // ✅ 2. Clean free slot detection for a single date (new endpoint)
+        //  Clean free slot detection for a single date (new endpoint)
         [HttpGet("freeSlots")]
         public async Task<IActionResult> GetFreeSlots([FromQuery] DateTime date, [FromQuery] bool allCalendars = true)
         {
@@ -106,7 +106,7 @@ namespace GoogleCalendarApi.Controllers
             // Use your existing GetEventsAsync to get all events for that date
             var events = await _calendar.GetEventsAsync(startOfDay, endOfDay, allCalendars);
 
-            // Find textual free slot strings
+       
             var freeSlotStrings = _freeSlotService.FindFreeSlotStrings(events, date);
 
             return Ok(freeSlotStrings);
@@ -114,48 +114,109 @@ namespace GoogleCalendarApi.Controllers
 
         [HttpPost("schedule")]
         public async Task<IActionResult> ScheduleMeeting(
-    [FromBody] CreateMeetingRequest request,
-    [FromQuery] bool allCalendars = true)
+     [FromBody] CreateMeetingRequest request,
+     [FromQuery] bool allCalendars = true)
         {
-            // 1️⃣ Get existing events for that same day
+            // 1) Load existing events for the day
             var startOfDay = request.StartTime.Date;
             var endOfDay = startOfDay.AddDays(1);
-
             var existingEvents = await _calendar.GetEventsAsync(startOfDay, endOfDay, allCalendars);
 
-            // 2️⃣ Create the new meeting
+            // 2) Build the local new event
             var newEvent = new CalendarEvent
             {
-                Id = Guid.NewGuid().ToString(),
                 Title = request.Title,
                 StartTime = request.StartTime,
                 EndTime = request.EndTime,
                 Description = request.Description
             };
 
-            // 3️⃣ Compute free slots for that day
+            // 3) Compute free slots and prepare tuple list
             var freeSlots = _freeSlotService.FindFreeSlots(existingEvents, startOfDay, endOfDay);
+            var slotTuples = freeSlots.Select(s => (s.Start, s.End)).ToList();
 
-            // 🔁 Convert TimeSlot to tuple format
-            var slotTuples = freeSlots
-                .Select(slot => (slot.Start, slot.End))
-                .ToList();
-
-            // 4️⃣ Auto-resolve overlaps (using your MeetingSchedulerService)
+            // 4) Resolve overlaps locally
             var updatedEvents = _meetingSchedulerService.AutoResolveOverlaps(existingEvents, newEvent, slotTuples);
 
-            // 5️⃣ Return a clean response
+            // 5) Persist changes
+
+            // 5a) Save the newly created event
+            var createdEvent = await _calendar.CreateEventAsync(
+                updatedEvents.First(e =>
+                    e.Title == newEvent.Title &&
+                    e.StartTime == newEvent.StartTime &&
+                    e.EndTime == newEvent.EndTime)
+            );
+
+            // 5b) For existing events that moved, update them on Google safely
+
+            // ✅ FIX: Safely handle duplicate GoogleEventIds
+            var originalByGoogleId = existingEvents
+                .Where(e => !string.IsNullOrEmpty(e.GoogleEventId))
+                .GroupBy(e => e.GoogleEventId)
+                .ToDictionary(g => g.Key, g => g.First());
+
+            var updates = new List<CalendarEvent>();
+
+            foreach (var ue in updatedEvents)
+            {
+                if (string.IsNullOrEmpty(ue.GoogleEventId))
+                    continue; // newly created event already handled
+
+                if (originalByGoogleId.TryGetValue(ue.GoogleEventId, out var original))
+                {
+                    // detect if event changed
+                    bool changed = original.StartTime != ue.StartTime ||
+                                   original.EndTime != ue.EndTime ||
+                                   original.Title != ue.Title;
+
+                    if (changed)
+                    {
+                        // ensure correct CalendarId before updating
+                        ue.CalendarId = original.CalendarId;
+
+                        try
+                        {
+                            var updatedOnGoogle = await _calendar.UpdateEventAsync(ue);
+                            updates.Add(updatedOnGoogle);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Warning: Failed to update event {ue.GoogleEventId}: {ex.Message}");
+                        }
+                    }
+                }
+            }
+
+            // 6) Build final response
             return Ok(new
             {
-                Message = "Meeting scheduled successfully. Overlaps resolved automatically.",
-                Events = updatedEvents.Select(e => new
+                Message = "Meeting scheduled successfully. Overlaps resolved and changes saved to Google Calendar.",
+                Created = new
+                {
+                    createdEvent.Title,
+                    createdEvent.StartTime,
+                    createdEvent.EndTime,
+                    createdEvent.GoogleEventId
+                },
+                Updated = updates.Select(u => new
+                {
+                    u.Title,
+                    u.StartTime,
+                    u.EndTime,
+                    u.GoogleEventId
+                }),
+                All = updatedEvents.Select(e => new
                 {
                     e.Title,
                     e.StartTime,
-                    e.EndTime
+                    e.EndTime,
+                    e.GoogleEventId,
+                    e.CalendarId
                 })
             });
         }
+
 
     }
 }
