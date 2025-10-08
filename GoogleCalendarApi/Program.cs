@@ -19,6 +19,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ICalendarService, GoogleCalendarService>();
 builder.Services.AddSingleton<IOverlapService, OverlapService>();
 builder.Services.AddSingleton<IFreeSlotService, FreeSlotService>();
+builder.Services.AddSingleton<IMeetingSchedulerService, MeetingSchedulerService>();
+
+
 
 var app = builder.Build();
 

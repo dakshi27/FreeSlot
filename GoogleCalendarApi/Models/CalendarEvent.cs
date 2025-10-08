@@ -6,6 +6,7 @@ namespace GoogleCalendarApi.Models
 {
     public class CalendarEvent
     {
+        public string Id { get; set; } = Guid.NewGuid().ToString(); // ✅ Add this
         public string Title { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

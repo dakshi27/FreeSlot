@@ -1,4 +1,4 @@
-﻿/*using GoogleCalendarApi.Models;
+﻿using GoogleCalendarApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,165 +7,60 @@ namespace GoogleCalendarApi.Services
 {
     public class FreeSlotService : IFreeSlotService
     {
+        // ✅ Implementation 1 - Find structured free slots
         public List<TimeSlot> FindFreeSlots(List<CalendarEvent> events, DateTime from, DateTime to)
         {
             var freeSlots = new List<TimeSlot>();
+            var workingStart = from.Date.AddHours(9);   // 9 AM fixed working hours
+            var workingEnd = from.Date.AddHours(17);    // 5 PM
 
-            // Filter events within the range and sort by start time
-            var sortedEvents = events
-                .Where(e => e.EndTime > from && e.StartTime < to)
+            // Filter only events for that day
+            var dayEvents = events
+                .Where(e => e.StartTime.Date == from.Date)
                 .OrderBy(e => e.StartTime)
                 .ToList();
 
-            // Merge overlapping events
-            var mergedEvents = new List<CalendarEvent>();
-            foreach (var e in sortedEvents)
-            {
-                if (!mergedEvents.Any())
-                {
-                    mergedEvents.Add(new CalendarEvent
-                    {
-                        StartTime = e.StartTime,
-                        EndTime = e.EndTime
-                    });
-                }
-                else
-                {
-                    var last = mergedEvents.Last();
-                    if (e.StartTime <= last.EndTime) // Overlap or touch
-                    {
-                        last.EndTime = last.EndTime > e.EndTime ? last.EndTime : e.EndTime;
-                    }
-                    else
-                    {
-                        mergedEvents.Add(new CalendarEvent
-                        {
-                            StartTime = e.StartTime,
-                            EndTime = e.EndTime
-                        });
-                    }
-                }
-            }
+            DateTime current = workingStart;
 
-            // Find free slots between merged events
-            DateTime lastEndTime = from;
-            foreach (var e in mergedEvents)
+            foreach (var ev in dayEvents)
             {
-                if (e.StartTime > lastEndTime)
+                if (ev.StartTime > current)
                 {
                     freeSlots.Add(new TimeSlot
                     {
-                        Start = lastEndTime,
-                        End = e.StartTime
+                        Start = current,
+                        End = ev.StartTime
                     });
                 }
 
-                lastEndTime = e.EndTime > lastEndTime ? e.EndTime : lastEndTime;
+                if (ev.EndTime > current)
+                    current = ev.EndTime;
             }
 
-            // Final slot after last event
-            if (lastEndTime < to)
+            // Last slot until 5 PM
+            if (current < workingEnd)
             {
                 freeSlots.Add(new TimeSlot
                 {
-                    Start = lastEndTime,
-                    End = to
+                    Start = current,
+                    End = workingEnd
                 });
             }
 
             return freeSlots;
         }
-    }
-}*/
 
-using GoogleCalendarApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace GoogleCalendarApi.Services
-{
-    public class FreeSlotService : IFreeSlotService
-    {
-        public List<TimeSlot> FindFreeSlots(List<CalendarEvent> events, DateTime from, DateTime to)
+        // ✅ Implementation 2 - String format version
+        public List<string> FindFreeSlotStrings(List<CalendarEvent> events, DateTime date)
         {
-            var freeSlots = new List<TimeSlot>();
-
-            TimeSpan workStart = new TimeSpan(9, 0, 0);  // 9:00 AM
-            TimeSpan workEnd = new TimeSpan(18, 0, 0);   // 6:00 PM
-            TimeSpan minSlotDuration = TimeSpan.FromMinutes(30);
-
-            // Filter only Dakshitha's events within range
-            var userEvents = events
-                .Where(e => e.Attendees.Contains("Dakshitha"))
-                .Where(e => e.EndTime > from && e.StartTime < to)
-                .OrderBy(e => e.StartTime)
-                .ToList();
-
-            // Merge overlapping events
-            var mergedEvents = new List<CalendarEvent>();
-            foreach (var e in userEvents)
-            {
-                if (!mergedEvents.Any())
-                {
-                    mergedEvents.Add(new CalendarEvent { StartTime = e.StartTime, EndTime = e.EndTime });
-                }
-                else
-                {
-                    var last = mergedEvents.Last();
-                    if (e.StartTime <= last.EndTime)
-                    {
-                        last.EndTime = last.EndTime > e.EndTime ? last.EndTime : e.EndTime;
-                    }
-                    else
-                    {
-                        mergedEvents.Add(new CalendarEvent { StartTime = e.StartTime, EndTime = e.EndTime });
-                    }
-                }
-            }
-
-            // Loop through each day
-            for (var day = from.Date; day <= to.Date; day = day.AddDays(1))
-            {
-                if (day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday)
-                    continue;
-
-                var dayStart = day + workStart;
-                var dayEnd = day + workEnd;
-
-                var dayEvents = mergedEvents
-                    .Where(e => e.StartTime.Date == day.Date)
-                    .OrderBy(e => e.StartTime)
-                    .ToList();
-
-                DateTime currentTime = dayStart;
-
-                foreach (var ev in dayEvents)
-                {
-                    if (ev.StartTime > currentTime && ev.StartTime - currentTime >= minSlotDuration)
-                    {
-                        freeSlots.Add(new TimeSlot
-                        {
-                            Start = currentTime,
-                            End = ev.StartTime
-                        });
-                    }
-
-                    currentTime = ev.EndTime > currentTime ? ev.EndTime : currentTime;
-                }
-
-                if (dayEnd - currentTime >= minSlotDuration)
-                {
-                    freeSlots.Add(new TimeSlot
-                    {
-                        Start = currentTime,
-                        End = dayEnd
-                    });
-                }
-            }
-
-            return freeSlots;
+            var structured = FindFreeSlots(events, date, date);
+            return structured.Select(s => $"Free: {s.Start:HH:mm} - {s.End:HH:mm}").ToList();
         }
     }
 }
+
+
+
+
+
 
