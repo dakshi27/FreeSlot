@@ -28,4 +28,8 @@ export class CalendarService {
   getSuggestedReschedules(date: string, allCalendars: boolean, bufferMinutes: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/suggest-reschedules?date=${date}&allCalendars=${allCalendars}&bufferMinutes=${bufferMinutes}`);
   }
+
+  scheduleMeeting(meetingDetails: any, allCalendars: boolean = true): Observable<any> {
+    return this.http.post(`${this.baseUrl}/schedule?allCalendars=${allCalendars}`, meetingDetails);
+  }
 }

@@ -52,4 +52,43 @@ export class RecommenderComponent {
         this.suggestions.set([]);
         this.error.set(null);
     }
+
+    applySuggestion(item: any) {
+        // Helper to format date as local ISO string (YYYY-MM-DDTHH:mm:ss.sss)
+        // This ensures the backend receives the exact time shown on the UI, avoiding UTC conversion issues (e.g. +5:30 vs +5:00)
+        const toLocalISO = (dateStr: string) => {
+            const date = new Date(dateStr);
+            const pad = (n: number) => n.toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const month = pad(date.getMonth() + 1);
+            const day = pad(date.getDate());
+            const hours = pad(date.getHours());
+            const minutes = pad(date.getMinutes());
+            const seconds = pad(date.getSeconds());
+            const ms = date.getMilliseconds().toString().padStart(3, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${ms}`;
+        };
+
+        // Map suggestion item to API payload
+        const payload = {
+            title: item.title,
+            startTime: toLocalISO(item.newStart),
+            endTime: toLocalISO(item.newEnd),
+            description: item.description || 'Rescheduled via FreeSlot' // Default description if missing
+        };
+
+        this.calendarService.scheduleMeeting(payload).subscribe({
+            next: (response) => {
+                console.log('Meeting scheduled successfully', response);
+                // Ideally, remove the item from the list or show a success message
+                // For now, we can just remove it from the local suggestions list to indicate it's done
+                this.suggestions.update(current => current.filter(s => s !== item));
+                alert('Meeting rescheduled successfully!');
+            },
+            error: (err) => {
+                console.error('Error scheduling meeting', err);
+                alert('Failed to apply schedule. Please try again.');
+            }
+        });
+    }
 }
