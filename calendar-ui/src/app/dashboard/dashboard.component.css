@@ -1,0 +1,219 @@
+:host {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1000;
+}
+
+.sidebar-container {
+    width: 260px;
+    height: 100%;
+    /* Default Light Mode: White background, gray borders/text */
+    background-color: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    color: #374151;
+    /* Gray-700 */
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 0.75rem;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s, border-color 0.3s;
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
+/* Dark Mode Overrides (Use generic selector or :host-context if available, 
+   but since this is a global class toggle on html/body, we can use global selector reference 
+   OR assume the component styles will strip :host-context.
+   Angular best practice: :host-context(.my-app-dark) works) */
+:host-context(.my-app-dark) .sidebar-container {
+    background-color: #09090b;
+    /* Deep black */
+    border-right-color: #27272a;
+    color: #e4e4e7;
+}
+
+.sidebar-container.collapsed {
+    width: 70px;
+    padding: 0.75rem 0.5rem;
+    align-items: center;
+}
+
+.sidebar-container.collapsed .sidebar-header,
+.sidebar-container.collapsed .nav-item,
+.sidebar-container.collapsed .sidebar-footer {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.sidebar-container.collapsed .workspace-info,
+.sidebar-container.collapsed .pi-sort-alt,
+.sidebar-container.collapsed .user-info {
+    display: none;
+}
+
+/* Header */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.2s;
+    min-height: 48px;
+}
+
+.sidebar-header:hover {
+    background: #f3f4f6;
+    /* Light gray hover */
+}
+
+:host-context(.my-app-dark) .sidebar-header:hover {
+    background: #27272a;
+}
+
+.workspace-icon {
+    min-width: 32px;
+    height: 32px;
+    background: #10b981;
+    /* Green primary */
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.workspace-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.workspace-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #111827;
+    /* Dark text */
+}
+
+:host-context(.my-app-dark) .workspace-name {
+    color: #fff;
+}
+
+.workspace-type {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+:host-context(.my-app-dark) .workspace-type {
+    color: #a1a1aa;
+}
+
+/* Nav Items */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #6b7280;
+    /* Gray-500 */
+    transition: all 0.2s;
+    height: 40px;
+}
+
+:host-context(.my-app-dark) .nav-item {
+    color: #a1a1aa;
+}
+
+.nav-item:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+:host-context(.my-app-dark) .nav-item:hover {
+    background: #27272a;
+    color: #fff;
+}
+
+.nav-item.active {
+    background: #f3f4f6;
+    color: #111827;
+    /* Active text dark */
+    font-weight: 500;
+}
+
+:host-context(.my-app-dark) .nav-item.active {
+    background: #27272a;
+    color: #fff;
+}
+
+.nav-item i {
+    font-size: 1.1rem;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Sections */
+.sidebar-section {
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #9ca3af;
+    cursor: default;
+    height: 32px;
+}
+
+.collapse-btn {
+    margin-top: auto;
+    margin-bottom: 0.5rem;
+    background: transparent;
+    border: 1px solid #e5e7eb;
+    color: #6b7280;
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+:host-context(.my-app-dark) .collapse-btn {
+    border-color: #27272a;
+    color: #71717a;
+}
+
+.collapse-btn:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+:host-context(.my-app-dark) .collapse-btn:hover {
+    background: #27272a;
+    color: #fff;
+}

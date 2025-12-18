@@ -1,0 +1,55 @@
+<div class="scroll-container">
+    <section class="intro-section snap-section">
+        <div class="intro-content fade-in-up">
+            <h1 class="page-title">The Visionaries</h1>
+            <p class="page-subtitle">Meet the minds behind FreeSlot Enterprise</p>
+            <div class="scroll-indicator">
+                <span>Scroll to meet the team</span>
+                <i class="pi pi-arrow-down bounce"></i>
+            </div>
+        </div>
+    </section>
+
+    <section *ngFor="let member of team(); let i = index" class="member-section snap-section"
+        [ngClass]="'theme-' + member.theme" [attr.data-index]="i">
+
+        <div class="member-content">
+            <div class="image-column">
+                <div class="image-wrapper reveal-image">
+                    <img [src]="member.image"
+                        (error)="member.image = 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + member.avatarSeed"
+                        [alt]="member.name" [style.object-position]="member.objectPosition || 'top center'">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+
+            <div class="info-column">
+                <div class="member-role slide-in-right delay-1">{{ member.role }}</div>
+                <h2 class="member-name slide-in-right delay-2">{{ member.name }}</h2>
+                <p class="member-description slide-in-right delay-3">{{ member.description }}</p>
+
+                <div class="contributions slide-in-right delay-4">
+                    <span class="label">Key Contributions</span>
+                    <div class="tags">
+                        <span class="tag" *ngFor="let tag of member.contributions">{{ tag }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="visual-bg" *ngIf="member.theme === 'lead'">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+        </div>
+        <div class="visual-bg" *ngIf="member.theme === 'backend'">
+            <div class="grid-lines"></div>
+        </div>
+        <div class="visual-bg" *ngIf="member.theme === 'frontend'">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+        </div>
+
+        <div class="section-number">0{{ i + 1 }}</div>
+    </section>
+</div>

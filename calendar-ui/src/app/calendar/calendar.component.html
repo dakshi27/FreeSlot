@@ -1,0 +1,122 @@
+<div class="flex flex-col gap-6 h-full relative">
+
+  <!-- Toolbar / Controls -->
+  <div
+    class="flex justify-between items-center bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-gray-100 transition-all hover:shadow-md sticky top-0 z-10">
+    <div class="flex items-center gap-4">
+      <h2 class="text-xl font-bold text-gray-800 m-0">Calendar</h2>
+    </div>
+
+    <div class="flex gap-3">
+      <p-button label="Analyze Schedule" (onClick)="sidebarVisible = true" icon="pi pi-sliders-h"
+        styleClass="p-button-outlined p-button-secondary p-button-sm rounded-lg">
+      </p-button>
+      <p-button label="Refresh" (onClick)="loadAllData()" [loading]="loading" icon="pi pi-refresh"
+        styleClass="p-button-text p-button-secondary p-button-sm rounded-lg">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Main Content: Full Width Calendar -->
+  <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 min-h-[600px]">
+    <full-calendar [options]="options" [events]="allCalendarEvents"></full-calendar>
+  </div>
+
+  <!-- Sidebar for Analysis Tools -->
+  <p-sidebar [(visible)]="sidebarVisible" position="right" [baseZIndex]="10000"
+    styleClass="w-full md:w-[400px] p-sidebar-lg">
+    <ng-template pTemplate="header">
+      <div class="flex items-center gap-2">
+        <i class="pi pi-cog text-xl text-gray-600"></i>
+        <h3 class="text-xl font-bold text-gray-800 m-0">Schedule Analysis</h3>
+      </div>
+    </ng-template>
+
+    <div class="flex flex-col gap-6 mt-4">
+
+      <!-- Controls -->
+      <div class="flex flex-col gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+        <!-- Date Input -->
+        <div class="flex flex-col gap-1.5">
+          <label for="date" class="text-xs uppercase tracking-wider text-gray-500 font-semibold ml-1">Date</label>
+          <div class="relative">
+            <i class="pi pi-calendar absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="date" id="date" [(ngModel)]="selectedDate"
+              class="pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all w-full">
+          </div>
+        </div>
+
+        <!-- Buffer Input -->
+        <div class="flex flex-col gap-1.5">
+          <label for="buffer" class="text-xs uppercase tracking-wider text-gray-500 font-semibold ml-1">Buffer
+            (min)</label>
+          <div class="relative">
+            <i class="pi pi-clock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="number" id="buffer" [(ngModel)]="bufferMinutes"
+              class="pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all w-full">
+          </div>
+        </div>
+
+        <p-button label="Apply & Refresh" (onClick)="loadAllData()" [loading]="loading" icon="pi pi-check"
+          styleClass="w-full p-button-primary p-button-sm rounded-lg">
+        </p-button>
+      </div>
+
+      <!-- Suggested Reschedules -->
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+          <i class="pi pi-calendar-plus text-blue-600"></i>
+          <h4 class="font-semibold text-gray-800 m-0">Suggestions</h4>
+        </div>
+
+        <div *ngIf="loading && !suggestedReschedules?.length" class="text-gray-400 text-sm text-center py-4">Loading...
+        </div>
+
+        <div *ngIf="!suggestedReschedules?.length && !loading" class="text-gray-400 text-sm italic text-center py-4">
+          No suggestions found.
+        </div>
+
+        <div *ngIf="suggestedReschedules?.length" class="flex flex-col gap-3">
+          <div *ngFor="let slot of suggestedReschedules"
+            class="p-3 rounded-lg bg-blue-50/50 border border-blue-100 flex flex-col gap-1 transition-all hover:shadow-sm hover:bg-blue-50 cursor-pointer group">
+            <div class="font-semibold text-blue-900 text-sm group-hover:text-blue-700">{{ slot.title }}</div>
+            <div class="flex items-center gap-2 text-xs text-blue-600">
+              <i class="pi pi-clock text-[10px]"></i>
+              <span class="font-medium bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs">
+                {{ formatDate(slot.newStart) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conflicts -->
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+          <i class="pi pi-exclamation-triangle text-red-600"></i>
+          <h4 class="font-semibold text-gray-800 m-0">Conflicts</h4>
+        </div>
+
+        <div *ngIf="loading && !overlaps?.length" class="text-gray-400 text-sm text-center py-4">Loading...</div>
+
+        <p-messages [value]="overlapMessages" [closable]="false" styleClass="mb-2 text-xs"></p-messages>
+
+        <div *ngIf="overlaps?.length" class="flex flex-col gap-3">
+          <div *ngFor="let o of overlaps"
+            class="p-3 rounded-lg bg-red-50/50 border border-red-100 flex flex-col gap-1 transition-all hover:shadow-sm hover:bg-red-50">
+            <div class="flex items-center gap-1 text-red-800 font-semibold text-xs flex-wrap">
+              <span>{{ o.event1 }}</span>
+              <span class="text-red-400 text-[10px]">vs</span>
+              <span>{{ o.event2 }}</span>
+            </div>
+            <div class="text-xs text-red-600 flex items-center gap-1">
+              <i class="pi pi-calendar-times text-[10px]"></i>
+              {{ formatDate(o.start1) }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </p-sidebar>
+</div>

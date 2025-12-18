@@ -1,0 +1,98 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-[600px] overflow-hidden flex flex-col max-h-[90vh]">
+
+        <!-- Toolbar items -->
+        <div class="flex items-center justify-between px-4 py-2 border-b border-gray-100 shrink-0">
+            <div class="flex items-center gap-2">
+                <button pButton icon="pi pi-pencil"
+                    class="p-button-rounded p-button-text p-button-plain text-gray-600 w-10 h-10" pTooltip="Edit event"
+                    (click)="editEvent()"></button>
+                <button pButton icon="pi pi-trash"
+                    class="p-button-rounded p-button-text p-button-plain text-gray-600 w-10 h-10"
+                    pTooltip="Delete event" (click)="deleteEvent()"></button>
+                <button pButton icon="pi pi-envelope"
+                    class="p-button-rounded p-button-text p-button-plain text-gray-600 w-10 h-10"
+                    pTooltip="Email guests"></button>
+                <button pButton icon="pi pi-ellipsis-v"
+                    class="p-button-rounded p-button-text p-button-plain text-gray-600 w-10 h-10"
+                    pTooltip="Options"></button>
+            </div>
+            <button pButton icon="pi pi-times"
+                class="p-button-rounded p-button-text p-button-plain text-gray-600 w-10 h-10" pTooltip="Close"
+                (click)="goBack()"></button>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="overflow-y-auto custom-scrollbar p-6 flex-1">
+
+            <div class="flex-1">
+                <h1 class="text-[22px] font-normal text-gray-800 leading-tight mb-1">{{ event?.title }}</h1>
+                <div class="text-base text-gray-600 mb-4">{{ formattedDate }} • {{ formattedTimeRange }}</div>
+
+                <!-- Join Button Section -->
+                <div class="flex flex-col gap-2 mb-8">
+                    <button pButton label="Join with Google Meet" icon="pi pi-video"
+                        class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded border-none shadow-sm text-left flex justify-start"
+                        (click)="joinMeeting()"></button>
+                    <div class="text-xs text-gray-500 pl-1">meet.google.com/xyz-abcd-efg</div>
+                </div>
+
+                <!-- Guests Section -->
+                <div class="flex gap-4 mb-6 items-start">
+                    <div class="w-6 h-5 flex items-center justify-center shrink-0">
+                        <i class="pi pi-users text-gray-500"></i> <!-- Changed to Users icon for match -->
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-gray-600 font-medium text-sm mb-3">{{ guestCount }} guests</div>
+
+                        <div class="space-y-3">
+                            <div *ngFor="let p of participants" class="flex items-center justify-between group">
+                                <div class="flex items-center gap-3">
+                                    <p-avatar [image]="p.image" shape="circle" size="normal"
+                                        class="border border-gray-200"></p-avatar>
+                                    <div class="flex flex-col">
+                                        <span class="text-sm text-gray-800 font-medium leading-none">
+                                            {{ p.name }} <span *ngIf="p.isOrganizer"
+                                                class="text-gray-500 font-normal ml-1">Organizer</span>
+                                        </span>
+                                        <span class="text-xs text-gray-500 group-hover:block hidden">{{ p.email
+                                            }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description Section -->
+                <div class="flex gap-4 mb-4 items-start" *ngIf="description">
+                    <div class="w-6 h-5 flex items-center justify-center shrink-0">
+                        <i class="pi pi-align-left text-gray-400"></i>
+                    </div>
+                    <p class="text-sm text-gray-700 whitespace-pre-line leading-relaxed flex-1">{{ description }}
+                    </p>
+                </div>
+
+                <!-- Notification Mock -->
+                <div class="flex gap-4 mb-4 items-start">
+                    <div class="w-6 h-5 flex items-center justify-center shrink-0">
+                        <i class="pi pi-bell text-gray-400"></i>
+                    </div>
+                    <p class="text-sm text-gray-700 flex-1">10 minutes before</p>
+                </div>
+
+                <!-- Calendar Owner Mock -->
+                <div class="flex gap-4 mb-2 items-start">
+                    <div class="w-6 h-5 flex items-center justify-center shrink-0"> <!-- Fixed width to match others -->
+                        <i class="pi pi-calendar text-gray-400"></i>
+                    </div>
+                    <div class="text-sm flex-1">
+                        <span class="text-gray-700 font-medium block">Dakshitha Thiriveedhi</span>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

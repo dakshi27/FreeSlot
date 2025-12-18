@@ -1,0 +1,33 @@
+<!-- Splash Screen Overlay -->
+<app-splash-screen *ngIf="showSplash" (complete)="onSplashComplete()"></app-splash-screen>
+
+
+
+<app-dashboard (toggleChange)="onSidebarToggle($event)"></app-dashboard>
+
+<!-- Navbar -->
+<div class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50 transition-all duration-300"
+    [style.margin-left.px]="isSidebarCollapsed ? 70 : 260">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center gap-3">
+                <i class="pi pi-calendar text-primary text-2xl"></i>
+                <span class="font-bold text-xl text-gray-900">FreeSlot Scheduler</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button pButton [icon]="isDarkMode ? 'pi pi-sun' : 'pi pi-moon'" (click)="toggleTheme()"
+                    class="p-button-rounded p-button-text p-button-secondary">
+                </button>
+                <!-- Placeholder for future user menu or settings -->
+                <button class="p-button-rounded p-button-text p-button-secondary" icon="pi pi-cog"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<main
+    [class]="isFullWidthPage ? 'w-full transition-all duration-300' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all duration-300'"
+    [style.margin-left.px]="isSidebarCollapsed ? 70 : 260">
+    <router-outlet></router-outlet>
+</main>

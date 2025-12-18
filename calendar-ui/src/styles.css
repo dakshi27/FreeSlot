@@ -1,0 +1,411 @@
+/* Import Inter Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Global Reset & Body */
+:root {
+    --bg-body: #f8f9fa;
+    --text-color: #333;
+    --card-bg: #ffffff;
+    --border-color: #e5e7eb;
+    --text-secondary: #6b7280;
+    --text-primary: #111827;
+
+    /* Accents */
+    --green-50: #f0fdf4;
+    --green-100: #dcfce7;
+    --green-600: #16a34a;
+
+    --red-50: #fef2f2;
+    --red-100: #fee2e2;
+    --red-600: #dc2626;
+    --red-700: #b91c1c;
+}
+
+/* Dark Mode Overrides */
+.my-app-dark {
+    --bg-body: #111827;
+    /* Dark gray/black */
+    --text-color: #e5e7eb;
+    --card-bg: #1f2937;
+    /* Darker gray for cards */
+    --border-color: #374151;
+    --text-secondary: #9ca3af;
+    --text-primary: #f9fafb;
+
+    /* Accents Dark */
+    --green-50: #064e3b;
+    /* Dark green bg */
+    --green-100: #065f46;
+    --green-600: #34d399;
+    /* Light green text */
+
+    --red-50: #450a0a;
+    /* Dark red bg */
+    --red-100: #7f1d1d;
+    --red-600: #f87171;
+    /* Light red text */
+    --red-700: #fca5a5;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: var(--bg-body);
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* --- Utility Classes (Tailwind-like) --- */
+
+/* Layout */
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.grid {
+    display: grid;
+}
+
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.gap-1 {
+    gap: 0.25rem;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.gap-3 {
+    gap: 0.75rem;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.gap-6 {
+    gap: 1.5rem;
+}
+
+/* Spacing */
+.m-0 {
+    margin: 0;
+}
+
+.mr-1 {
+    margin-right: 0.25rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.p-3 {
+    padding: 0.75rem;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+.px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.py-8 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Sizing */
+.w-8 {
+    width: 2rem;
+}
+
+.h-8 {
+    height: 2rem;
+}
+
+.h-16 {
+    height: 4rem;
+}
+
+.max-w-7xl {
+    max-width: 80rem;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Typography */
+.text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.italic {
+    font-style: italic;
+}
+
+/* Colors - Using Variables */
+.bg-white {
+    background-color: var(--card-bg);
+    transition: background-color 0.3s;
+}
+
+.bg-green-50 {
+    background-color: var(--green-50);
+}
+
+.bg-green-100 {
+    background-color: var(--green-100);
+}
+
+.bg-red-50 {
+    background-color: var(--red-50);
+}
+
+.bg-red-100 {
+    background-color: var(--red-100);
+}
+
+.text-gray-400 {
+    color: #9ca3af;
+}
+
+.text-gray-500 {
+    color: var(--text-secondary);
+}
+
+.text-gray-700 {
+    color: var(--text-color);
+}
+
+.text-gray-800 {
+    color: var(--text-primary);
+}
+
+.text-gray-900 {
+    color: var(--text-primary);
+}
+
+.text-green-600 {
+    color: var(--green-600);
+}
+
+.text-red-400 {
+    color: #f87171;
+}
+
+.text-red-600 {
+    color: var(--red-600);
+}
+
+.text-red-700 {
+    color: var(--red-700);
+}
+
+.text-primary {
+    color: #10b981;
+}
+
+/* Borders & Rounded */
+.border {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.border-b {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+.border-gray-100 {
+    border-color: var(--border-color);
+}
+
+.border-gray-200 {
+    border-color: var(--border-color);
+}
+
+.border-green-100 {
+    border-color: var(--green-100);
+}
+
+.border-red-100 {
+    border-color: var(--red-100);
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.rounded-xl {
+    border-radius: 0.75rem;
+}
+
+.rounded-full {
+    border-radius: 9999px;
+}
+
+/* Effects */
+.shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.sticky {
+    position: sticky;
+}
+
+.top-0 {
+    top: 0;
+}
+
+.z-50 {
+    z-index: 50;
+}
+
+/* Hover */
+.hover\:shadow-md:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Responsive */
+@media (min-width: 640px) {
+    .sm\:px-6 {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .lg\:px-8 {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+/* PrimeNG Overrides */
+.p-button {
+    border-radius: 8px !important;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.fc .fc-button-primary {
+    background-color: #10b981;
+    border-color: #10b981;
+    border-radius: 6px;
+    text-transform: capitalize;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: #059669;
+    border-color: #059669;
+}
+
+.fc .fc-col-header-cell-cushion {
+    padding: 12px 0;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* Dark Mode Specific Overrides for PrimeNG if needed */
+.my-app-dark .fc .fc-theme-standard td,
+.my-app-dark .fc .fc-theme-standard th {
+    border-color: var(--border-color);
+}
+
+/* Content Container to respect Sidebar */
+.app-container {
+    margin-left: 260px;
+    /* Width of sidebar */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}

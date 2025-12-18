@@ -1,0 +1,332 @@
+:host {
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+    /* Create a nice gradient background */
+    background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 40%),
+        radial-gradient(circle at bottom left, rgba(37, 99, 235, 0.05), transparent 40%);
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+/* Typography */
+.logo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border-radius: 99px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.hero-title {
+    font-size: 4rem;
+    /* Big title */
+    line-height: 1.1;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+:host-context(.my-app-dark) .hero-title {
+    color: #fff;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #6b7280;
+    margin-bottom: 3rem;
+    max-width: 500px;
+}
+
+:host-context(.my-app-dark) .hero-subtitle {
+    color: #d1d5db;
+}
+
+/* CTAs */
+.cta-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.btn {
+    padding: 0.875rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background: #10b981;
+    color: #fff;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+}
+
+.btn-secondary {
+    background: #fff;
+    color: #111827;
+    border: 1px solid #e5e7eb;
+}
+
+:host-context(.my-app-dark) .btn-secondary {
+    background: #1f2937;
+    color: #fff;
+    border-color: #374151;
+}
+
+/* Features */
+.feature-pills {
+    display: flex;
+    gap: 1.5rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pill i {
+    color: #10b981;
+}
+
+/* Visuals (Right Column) */
+.hero-visual {
+    position: relative;
+    height: 500px;
+    perspective: 1000px;
+}
+
+.float-card {
+    position: absolute;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    backface-visibility: hidden;
+    transition: transform 0.5s;
+}
+
+:host-context(.my-app-dark) .float-card {
+    background: #1f2937;
+    border-color: #374151;
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* Calendar Mockup */
+.calendar-card {
+    width: 300px;
+    height: 240px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotateY(-10deg) rotateX(5deg);
+    z-index: 2;
+    animation: float-main 6s ease-in-out infinite;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.red {
+    background: #ef4444;
+}
+
+.yellow {
+    background: #fbbf24;
+}
+
+.green {
+    background: #22c55e;
+}
+
+.calendar-grid-mock {
+    position: relative;
+    height: 180px;
+    background: #f9fafb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+:host-context(.my-app-dark) .calendar-grid-mock {
+    background: #111827;
+}
+
+.line {
+    height: 60px;
+    border-bottom: 1px dashed #e5e7eb;
+}
+
+:host-context(.my-app-dark) .line {
+    border-color: #374151;
+}
+
+.mock-event {
+    position: absolute;
+    height: 40px;
+    background: #10b981;
+    border-radius: 4px;
+    color: white;
+    font-size: 10px;
+    padding: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Suggestion Mockup */
+.suggestion-card {
+    width: 180px;
+    top: 20%;
+    right: 0;
+    transform: translate(20%, 0) rotateZ(5deg);
+    z-index: 3;
+    animation: float-secondary 5s ease-in-out infinite 1s;
+}
+
+.icon-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #3b82f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mock-btn {
+    width: 100%;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+/* Toggle Mockup */
+.toggle-card {
+    width: 60px;
+    height: 60px;
+    bottom: 20%;
+    left: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-20%, 0);
+    z-index: 1;
+    animation: float-tertiary 7s ease-in-out infinite 0.5s;
+}
+
+/* Animations */
+@keyframes float-main {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) rotateY(-10deg) rotateX(5deg) translateY(0);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) rotateY(-10deg) rotateX(5deg) translateY(-20px);
+    }
+}
+
+@keyframes float-secondary {
+
+    0%,
+    100% {
+        transform: translate(20%, 0) rotateZ(5deg) translateY(0);
+    }
+
+    50% {
+        transform: translate(20%, 0) rotateZ(5deg) translateY(-10px);
+    }
+}
+
+@keyframes float-tertiary {
+
+    0%,
+    100% {
+        transform: translate(-20%, 0) translateY(0);
+    }
+
+    50% {
+        transform: translate(-20%, 0) translateY(15px);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-container {
+        grid-template-columns: 1fr;
+        padding: 4rem 1rem;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        margin: 0 auto 2rem auto;
+    }
+
+    .cta-group {
+        justify-content: center;
+    }
+
+    .feature-pills {
+        justify-content: center;
+    }
+
+    .hero-visual {
+        height: 400px;
+        margin-top: 2rem;
+    }
+}

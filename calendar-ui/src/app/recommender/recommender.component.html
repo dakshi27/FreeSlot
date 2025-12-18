@@ -1,0 +1,89 @@
+<div class="enterprise-container">
+    <!-- Header -->
+    <div class="mb-10">
+        <h1 class="text-3xl flex items-center gap-3">
+            <div class="w-8 h-8 rounded-md bg-blue-600/10 text-blue-600 flex items-center justify-center">
+                <i class="pi pi-calendar"></i>
+            </div>
+            Schedule Analysis
+        </h1>
+        <p class="mt-2">Review conflicts and apply intelligent rescheduling optimization.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+
+        <!-- Configuration -->
+        <div class="md:col-span-4">
+            <div class="enterprise-card sticky top-6">
+                <div class="section-label">Configuration</div>
+
+                <div class="flex flex-col gap-6">
+                    <div>
+                        <label class="input-label">Target Date</label>
+                        <input type="date" [(ngModel)]="selectedDate" class="input-enterprise">
+                    </div>
+
+                    <div>
+                        <label class="input-label">Buffer (minutes)</label>
+                        <input type="number" [(ngModel)]="bufferMinutes" class="input-enterprise">
+                    </div>
+
+                    <div class="pt-2"> <!-- Spacer for button -->
+                        <button (click)="analyzeSchedule()" [disabled]="isLoading()" class="btn-enterprise-primary">
+                            <i *ngIf="isLoading()" class="pi pi-spinner pi-spin mr-2"></i>
+                            {{ isLoading() ? 'Running Analysis...' : 'Run Analysis' }}
+                        </button>
+                        <p class="text-xs text-center text-gray-400 mt-3">
+                            AI will suggest optimal slots based on availability.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="md:col-span-8 mt-8 md:mt-0 lg:mt-4">
+            <div *ngIf="isLoading()" class="py-20 text-center text-gray-400">
+                Processing schedule…
+            </div>
+
+            <div *ngIf="error()" class="text-red-500 mb-6">
+                {{ error() }}
+            </div>
+
+            <div *ngIf="suggestions().length === 0 && !isLoading()" class="text-center py-24">
+                <p>No suggestions yet. Run analysis to see results.</p>
+            </div>
+
+            <div *ngIf="suggestions().length > 0" class="animate-fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="section-label">Recommended Actions ({{ suggestions().length }})</div>
+                    <button class="btn-enterprise-ghost" (click)="clearResults()">Clear</button>
+                </div>
+
+                <div class="space-y-4">
+                    <div *ngFor="let item of suggestions()" class="result-card">
+                        <div>
+                            <h4 class="font-semibold">{{ item.title }}</h4>
+                            <p class="text-xs text-gray-500">Conflict Resolved</p>
+                        </div>
+
+                        <div class="flex items-center gap-6">
+                            <div class="text-right">
+                                <div class="text-[10px] uppercase text-gray-400">Proposed Time</div>
+                                <div class="time-badge">
+                                    {{ item.newStart | date:'HH:mm' }} – {{ item.newEnd | date:'HH:mm' }}
+                                </div>
+                            </div>
+
+                            <button class="btn-apply">
+                                <i class="pi pi-check mr-1"></i> Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

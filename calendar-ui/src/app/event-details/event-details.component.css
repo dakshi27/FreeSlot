@@ -1,0 +1,32 @@
+/* Custom Scrollbar for the card content */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #e5e7eb;
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #d1d5db;
+}
+
+/* Ensure PrimeNG buttons don't have unwanted default backgrounds in text mode if global styles interfere */
+:host ::ng-deep .p-button.p-button-text.p-button-plain {
+    color: #4b5563;
+}
+
+:host ::ng-deep .p-button.p-button-text.p-button-plain:hover {
+    background: rgba(107, 114, 128, 0.1) !important;
+    color: #1f2937 !important;
+}
+
+/* Remove default PrimeNG focus rings if desired for cleaner look */
+:host ::ng-deep .p-button:focus {
+    box-shadow: none !important;
+}
