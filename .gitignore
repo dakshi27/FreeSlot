@@ -1,0 +1,16 @@
+# Node / Angular
+calendar-ui/node_modules/
+calendar-ui/dist/
+calendar-ui/.angular/
+calendar-ui/.vscode/
+
+# .NET / ASP.NET
+googlecalendarapi/bin/
+googlecalendarapi/obj/
+googlecalendarapi/.vs/
+
+# Secrets
+**/appsettings.json
+**/appsettings.Development.json
+
+
